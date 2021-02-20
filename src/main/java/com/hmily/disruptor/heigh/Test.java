@@ -5,6 +5,7 @@ import com.lmax.disruptor.BusySpinWaitStrategy;
 import com.lmax.disruptor.EventFactory;
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
+import com.lmax.disruptor.dsl.EventHandlerGroup;
 import com.lmax.disruptor.dsl.ProducerType;
 import lombok.extern.slf4j.Slf4j;
 
@@ -42,9 +43,17 @@ public class Test {
 //        1 handleEventsWith方法 添加多个handler实现即可
 //        2 handleEventsWith方法 分别进行调用
 //        disruptor.handleEventsWith(new Handler1(), new Handler2(), new Handler3());
-        disruptor.handleEventsWith(new Handler1());
+/*        disruptor.handleEventsWith(new Handler1());
         disruptor.handleEventsWith(new Handler2());
-        disruptor.handleEventsWith(new Handler3());
+        disruptor.handleEventsWith(new Handler3());*/
+
+        //2.3 菱形操作：1 和 2 并行，然后串行 3
+      /*  disruptor.handleEventsWith(new Handler1(), new Handler2())
+                .handleEventsWith(new Handler3());*/
+//        或者如下的写法：
+        EventHandlerGroup<Trade> ehGroup = disruptor.handleEventsWith(new Handler1(), new Handler2());
+        ehGroup.then(new Handler3());
+
 
         //3 启动disruptor
         RingBuffer<Trade> ringBuffer = disruptor.start();
