@@ -1,4 +1,4 @@
-package com.hmily.disruptor.disruptor;
+package com.hmily.disruptor;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
