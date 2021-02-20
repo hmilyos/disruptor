@@ -22,7 +22,7 @@ public class Test {
         ExecutorService es1 = Executors.newFixedThreadPool(1);
         ExecutorService es2 = Executors.newFixedThreadPool(5);
 
-        //1 构建Disruptor
+        //1 构建Disruptor, 用SINGLE单线程的话，线程池线程数必须>=需要监听的Handler个数，否则就会监听不到
         Disruptor<Trade> disruptor = new Disruptor<Trade>(new EventFactory<Trade>() {
             @Override
             public Trade newInstance() { return new Trade(); }},
@@ -51,9 +51,23 @@ public class Test {
       /*  disruptor.handleEventsWith(new Handler1(), new Handler2())
                 .handleEventsWith(new Handler3());*/
 //        或者如下的写法：
-        EventHandlerGroup<Trade> ehGroup = disruptor.handleEventsWith(new Handler1(), new Handler2());
-        ehGroup.then(new Handler3());
+     /*   EventHandlerGroup<Trade> ehGroup = disruptor.handleEventsWith(new Handler1(), new Handler2());
+        ehGroup.then(new Handler3());*/
 
+
+        //2.4 六边形操作
+//                  并行 1  -> 串行 2
+//        start ->                      -> 串行 3
+//                  并行 4  -> 串行 5
+        Handler1 h1 = new Handler1();
+        Handler2 h2 = new Handler2();
+        Handler3 h3 = new Handler3();
+        Handler4 h4 = new Handler4();
+        Handler5 h5 = new Handler5();
+        disruptor.handleEventsWith(h1, h4);
+        disruptor.after(h1).handleEventsWith(h2);
+        disruptor.after(h4).handleEventsWith(h5);
+        disruptor.after(h2, h5).handleEventsWith(h3);
 
         //3 启动disruptor
         RingBuffer<Trade> ringBuffer = disruptor.start();
