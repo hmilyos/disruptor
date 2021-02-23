@@ -10,27 +10,38 @@
     </parent>
     <groupId>com.hmily.disruptor</groupId>
     <artifactId>disruptor</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <name>disruptor</name>
-    <description>Demo project for Spring Boot</description>
+    <description>disruptor-Demo</description>
+    <packaging>pom</packaging>
+
     <properties>
         <java.version>1.8</java.version>
+        <springboot.version>2.4.3</springboot.version>
     </properties>
+
+    <modules>
+        <module>api-demo</module>
+    </modules>
+
     <dependencies>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <version>${springboot.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <optional>true</optional>
+            <version>1.18.18</version>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
+            <version>${springboot.version}</version>
         </dependency>
 
         <dependency>

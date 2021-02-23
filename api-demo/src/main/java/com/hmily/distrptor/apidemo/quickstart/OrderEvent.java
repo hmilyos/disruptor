@@ -1,4 +1,4 @@
-package com.hmily.disruptor.quickstart;
+package com.hmily.distrptor.apidemo.quickstart;
 
 import lombok.Data;
 

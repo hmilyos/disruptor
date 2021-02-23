@@ -1,9 +1,7 @@
-package com.hmily.disruptor.quickstart;
+package com.hmily.distrptor.apidemo.quickstart;
 
 
 import com.lmax.disruptor.RingBuffer;
-
-import java.nio.ByteBuffer;
 
 public class OrderEventProducer {
 

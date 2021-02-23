@@ -1,4 +1,4 @@
-package com.hmily.disruptor.heigh.multi;
+package com.hmily.distrptor.apidemo.heigh.multi;
 
 import com.lmax.disruptor.RingBuffer;
 

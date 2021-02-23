@@ -1,10 +1,10 @@
-package com.hmily.disruptor;
+package com.hmily.distrptor.apidemo;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class DisruptorApplicationTests {
+class ApiDemoApplicationTests {
 
     @Test
     void contextLoads() {
