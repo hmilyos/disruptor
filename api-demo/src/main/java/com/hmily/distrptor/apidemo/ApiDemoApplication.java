@@ -1,13 +1,13 @@
-package com.hmily.disruptor;
+package com.hmily.distrptor.apidemo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class DisruptorApplication {
+public class ApiDemoApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(DisruptorApplication.class, args);
+        SpringApplication.run(ApiDemoApplication.class, args);
     }
 
 }
