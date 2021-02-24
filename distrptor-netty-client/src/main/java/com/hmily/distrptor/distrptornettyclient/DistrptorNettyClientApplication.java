@@ -15,19 +15,8 @@ public class DistrptorNettyClientApplication {
     public static void main(String[] args) {
         SpringApplication.run(DistrptorNettyClientApplication.class, args);
 
-        MessageConsumer[] conusmers = new MessageConsumer[4];
-        for (int i = 0; i < conusmers.length; i++) {
-            MessageConsumer messageConsumer = new MessageConsumerImpl4Client("code:clientId:" + i);
-            conusmers[i] = messageConsumer;
-        }
-        RingBufferWorkerPoolFactory.getInstance().initAndStart(ProducerType.MULTI,
-                1024 * 1024,
-                //new YieldingWaitStrategy(),
-                new BlockingWaitStrategy(),
-                conusmers);
-
         //建立连接 并发送消息
-        new NettyClient().sendData();
+//        new NettyClient().sendData();
 
     }
 

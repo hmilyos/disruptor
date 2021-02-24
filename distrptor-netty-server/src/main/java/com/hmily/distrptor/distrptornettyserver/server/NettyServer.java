@@ -1,6 +1,10 @@
 package com.hmily.distrptor.distrptornettyserver.server;
 
 import com.hmily.distrptor.distrptornettycommon.codec.MarshallingCodeCFactory;
+import com.hmily.distrptor.distrptornettycommon.disruptor.MessageConsumer;
+import com.hmily.distrptor.distrptornettycommon.disruptor.RingBufferWorkerPoolFactory;
+import com.lmax.disruptor.BlockingWaitStrategy;
+import com.lmax.disruptor.dsl.ProducerType;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.*;
@@ -15,9 +19,22 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 
 @Slf4j
+@Component
 public class NettyServer {
 
-    public NettyServer() {
+    @PostConstruct
+    public void init() {
+        MessageConsumer[] conusmers = new MessageConsumer[4];
+        for (int i = 0; i < conusmers.length; i++) {
+            MessageConsumer messageConsumer = new MessageConsumerImpl4Server("code:serverConsumerId:" + i);
+            conusmers[i] = messageConsumer;
+        }
+        RingBufferWorkerPoolFactory.getInstance().initAndStart(ProducerType.MULTI,
+                1024 * 1024,
+                //new YieldingWaitStrategy(),
+                new BlockingWaitStrategy(),
+                conusmers);
+
         //1. 创建两个工作线程组: 一个用于接受网络请求的线程组. 另一个用于实际处理业务的线程组
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup workGroup = new NioEventLoopGroup();

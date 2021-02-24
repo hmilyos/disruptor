@@ -2,7 +2,11 @@ package com.hmily.distrptor.distrptornettyclient.client;
 
 
 import com.hmily.distrptor.distrptornettycommon.codec.MarshallingCodeCFactory;
+import com.hmily.distrptor.distrptornettycommon.disruptor.MessageConsumer;
+import com.hmily.distrptor.distrptornettycommon.disruptor.RingBufferWorkerPoolFactory;
 import com.hmily.distrptor.distrptornettycommon.dto.TranslatorData;
+import com.lmax.disruptor.BlockingWaitStrategy;
+import com.lmax.disruptor.dsl.ProducerType;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.*;
@@ -12,8 +16,12 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
 
 @Slf4j
+@Component
 public class NettyClient {
 
     public static final String HOST = "127.0.0.1";
@@ -27,7 +35,19 @@ public class NettyClient {
 
     private ChannelFuture cf;
 
-    public NettyClient() {
+    @PostConstruct
+    public void init() {
+        MessageConsumer[] conusmers = new MessageConsumer[4];
+        for (int i = 0; i < conusmers.length; i++) {
+            MessageConsumer messageConsumer = new MessageConsumerImpl4Client("code:clientId:" + i);
+            conusmers[i] = messageConsumer;
+        }
+        RingBufferWorkerPoolFactory.getInstance().initAndStart(ProducerType.MULTI,
+                1024 * 1024,
+                //new YieldingWaitStrategy(),
+                new BlockingWaitStrategy(),
+                conusmers);
+
         this.connect(HOST, PORT);
     }
 
